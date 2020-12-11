@@ -78,8 +78,8 @@ class Application(tk.Frame):
             r_hd = self.s_fd.detect_intent(session=self.s_id, query_input=q_hd)
         except InvalidArgument:
             raise
-       
-        self.tx.insert(tk.END,'Agent : ' + r_hd.query_result.fulfillment_text)
+        
+        self.tx.insert(tk.END,'Agent : ' + r_hd.query_result.fulfillment_text + '\n')
         self.tx.see(tk.END)
         
     # Current count event handler

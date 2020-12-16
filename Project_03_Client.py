@@ -36,13 +36,18 @@ class Application(tk.Frame):
         self.s_fd = s_hand
         self.s_id = s_num
         self.r_qu = queue.Queue(maxsize=128)
+        
+    # Destory window
+    def self_destroy(self):
+        self.r_qu.put('END')
+        self.master.destroy()
 
     def create_widgets(self):       
         # Create var to read entry box
         self.e_txt = tk.StringVar()
         #Quit button
         self.quit = tk.Button(self, text="QUIT", fg="red",
-                              command=self.master.destroy)
+                              command=self.self_destroy)
         self.quit.pack(side="bottom")
         # Frame for Field & Button
         self.frame = tk.Frame(self)
@@ -74,13 +79,15 @@ class Application(tk.Frame):
     # DialogFlow response writer event handler
     def write_response(self):
         q_hd = self.r_qu.get()
-        try:
-            r_hd = self.s_fd.detect_intent(session=self.s_id, query_input=q_hd)
-        except InvalidArgument:
-            raise
-        
-        self.tx.insert(tk.END,'Agent : ' + r_hd.query_result.fulfillment_text + '\n')
-        self.tx.see(tk.END)
+        while not isinstance(q_hd,str) :
+            try:
+                r_hd = self.s_fd.detect_intent(session=self.s_id, query_input=q_hd)
+            except InvalidArgument:
+                raise
+            
+            self.tx.insert(tk.END,'Agent : ' + r_hd.query_result.fulfillment_text + '\n')
+            self.tx.see(tk.END)
+            q_hd = self.r_qu.get()
         
     # Current count event handler
     def send_request(self):
@@ -99,8 +106,8 @@ class Application(tk.Frame):
 #Main program
 # Setup connection to engine
 # defining parameters
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/dev/Desktop/Conestoga/PROG8420 Big Data Prog/Assignments/Project/BigDataProgConestoga-Project/../faq-chatbot_private_key.json"
-DIALOGFLOW_PROJECT_ID = 'faq-chatbot-hvho'
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/dev/Desktop/Conestoga/PROG8420 Big Data Prog/Assignments/Project/BigDataProgConestoga-Project/../avi-xopw-c8e61bd731a4.json"
+DIALOGFLOW_PROJECT_ID = 'avi-xopw'
 DIALOGFLOW_LANGUAGE_CODE = 'en'
 SESSION_ID = '1'
 

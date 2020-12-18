@@ -11,10 +11,7 @@ Description : Using Google's DialogFlow to implement FAQ chatbot
 
 """
 import threading, queue
-
-from tkinter import *
 import tkinter as tk
-
 import os
 import dialogflow_v2 as dialogflow
 from google.api_core.exceptions import InvalidArgument
@@ -54,7 +51,7 @@ class Application(tk.Frame):
         # Label
         tk.Label(self.frame, text="Please enter -> ").pack(side="left")
         # Text Input field
-        self.e_fld = tk.Entry(self.frame,textvariable = self.e_txt)
+        self.e_fld = tk.Entry(self.frame,textvariable = self.e_txt, width = 80 )
         self.e_fld.bind("<Return>",lambda e:self.send_request())
         self.e_fld.pack(side="left")
        
@@ -67,7 +64,7 @@ class Application(tk.Frame):
         
         self.frame1 = tk.Frame(self)
         # Text Box for results
-        self.tx = tk.Text(self.frame1, height = 40 , width = 40 )
+        self.tx = tk.Text(self.frame1, height = 40 , width = 100 , font = "Calibri 11")
         self.tx.pack(side="left", fill="y")
         sb = tk.Scrollbar(self.frame1, orient="vertical")
         sb.config(command=self.tx.yview)
@@ -85,7 +82,7 @@ class Application(tk.Frame):
             except InvalidArgument:
                 raise
             
-            self.tx.insert(tk.END,'Agent : ' + r_hd.query_result.fulfillment_text + '\n')
+            self.tx.insert(tk.END,'Agent : ' + r_hd.query_result.fulfillment_text + '\n\n')
             self.tx.see(tk.END)
             q_hd = self.r_qu.get()
         
@@ -106,7 +103,7 @@ class Application(tk.Frame):
 #Main program
 # Setup connection to engine
 # defining parameters
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/dev/Desktop/Conestoga/PROG8420 Big Data Prog/Assignments/Project/BigDataProgConestoga-Project/../avi-xopw-c8e61bd731a4.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/dev/Desktop/Conestoga/PROG8420 Big Data Prog/Assignments/Project/BigDataProgConestoga-Project/../faq_key.json"
 DIALOGFLOW_PROJECT_ID = 'avi-xopw'
 DIALOGFLOW_LANGUAGE_CODE = 'en'
 SESSION_ID = '1'
